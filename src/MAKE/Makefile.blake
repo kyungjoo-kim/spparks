@@ -1,4 +1,4 @@
-# serial = RedHat Linux box, g++, no MPI
+# blake = MPI with its default compiler
 
 SHELL = /bin/sh
 
@@ -6,12 +6,12 @@ SHELL = /bin/sh
 # compiler/linker settings
 # specify flags and libraries needed for your compiler
 
-CC =		clang++-mp-12 
+CC =		mpicxx
 CCFLAGS =	-O -std=c++11
 SHFLAGS =	-fPIC
 DEPFLAGS =	-M
 
-LINK =		g++
+LINK =		mpicxx
 LINKFLAGS =	-O
 LIB =	  	
 SIZE =		size
@@ -26,6 +26,7 @@ SHLIBFLAGS =	-shared
 
 # SPPARKS ifdef options, see doc/Section_start.html
 
+SPK_INC =	-DSPPARKS_GZIP
 SPK_INC =	-DSPPARKS_GZIP -DSPPARKS_UNORDERED_MAP
 
 # MPI library, can be src/STUBS dummy lib
@@ -33,9 +34,9 @@ SPK_INC =	-DSPPARKS_GZIP -DSPPARKS_UNORDERED_MAP
 # PATH = path for MPI library
 # LIB = name of MPI library
 
-MPI_INC =       -I../STUBS
-MPI_PATH = 	
-MPI_LIB =	../STUBS/libmpi.a
+MPI_INC =
+MPI_PATH =
+MPI_LIB =
 
 # JPEG library, only needed if -DLAMMPS_JPEG listed with LMP_INC
 # INC = path for jpeglib.h
@@ -44,7 +45,7 @@ MPI_LIB =	../STUBS/libmpi.a
 
 JPG_INC =       
 JPG_PATH = 	
-JPG_LIB =
+JPG_LIB =       
 
 # ---------------------------------------------------------------------
 # build rules and dependencies
