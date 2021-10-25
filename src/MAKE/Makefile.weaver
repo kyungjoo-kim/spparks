@@ -1,4 +1,4 @@
-# blake = MPI with its default compiler
+# weaver = MPI with its default compiler (mpicxx)
 
 SHELL = /bin/sh
 
