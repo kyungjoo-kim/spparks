@@ -27,7 +27,7 @@ using namespace SPPARKS_NS;
 // same as in other files
 
 enum{NONE,LINE_2N,SQ_4N,SQ_8N,TRI,SC_6N,SC_26N,FCC,BCC,DIAMOND,
-       FCC_OCTA_TETRA,RANDOM_1D,RANDOM_2D,RANDOM_3D};
+       FCC_OCTA_TETRA,RANDOM_1D,RANDOM_2D,RANDOM_3D,BRAVAIS};
 
 /* ---------------------------------------------------------------------- */
 
@@ -146,6 +146,8 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     add_basis(0.25,0.75,0.75);
     add_basis(0.75,0.75,0.75);
   }
+  if (style == BRAVAIS)
+
 
   // set defaults for optional args
 
