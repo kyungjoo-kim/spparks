@@ -78,7 +78,7 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     if domain->dimension == 1
       if (narg != 1)
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
-    if domain->dimension == 2
+    if (domain->dimension == 2)
       if (narg != 4)
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
     if domain->dimension == 3
