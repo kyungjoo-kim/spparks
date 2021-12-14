@@ -1,4 +1,0 @@
-#don't forget to load modules, located in /src/MODULES/weaver.sh
-rm dump.out
-rm log.spparks
-/ascldap/users/cjdanie/GitSPPARKS/main/src/spk_weaver -in in.Cu.txt

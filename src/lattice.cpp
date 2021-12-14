@@ -74,17 +74,23 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     cutoff = atof(arg[2]);
   }
   // need to decide how many arguments bravais command needs for 2-D vs 3-D lattices, now assuming 4 and 9 respectively
-  if (style == BRAVAIS)
-    if (domain->dimension == 1)
-      if (narg != 1)
+  if (style == BRAVAIS) {
+    if (domain->dimension == 1) {
+      if (narg != 1) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
-    if (domain->dimension == 2)
-      if (narg != 4)
+      }
+    }
+    if (domain->dimension == 2) {
+      if (narg != 4) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
-    if (domain->dimension == 3)
-      if (narg != 9)
+      }
+    }
+    if (domain->dimension == 3) {
+      if (narg != 9) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
-
+      }
+    }
+  }
   // check dimensionality
 
   if ((style == LINE_2N || style == RANDOM_1D) && 
@@ -146,7 +152,7 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     add_basis(0.25,0.75,0.75);
     add_basis(0.75,0.75,0.75);
   }
-  if (style == BRAVAIS)
+  //if (style == BRAVAIS)
 
 
   // set defaults for optional args
