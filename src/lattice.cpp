@@ -73,20 +73,22 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     nrandom = ATOTAGINT(arg[1]);
     cutoff = atof(arg[2]);
   }
-  // need to decide how many arguments bravais command needs for 2-D vs 3-D lattices, now assuming 4 and 9 respectively
+  // need to decide how many arguments bravais command needs for 2-D vs 3-D lattices, now assuming 4 and 9 respectively, plus a lattice constant, plus any additional basis atoms...
+  // 1-D lattice can still have multiple basis atoms...
   if (style == BRAVAIS) {
+    latconst = atof(arg[1]);
     if (domain->dimension == 1) {
-      if (narg != 1) {
+      if (narg == 0) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
     if (domain->dimension == 2) {
-      if (narg != 4) {
+      if (((narg-5)%2)!=0) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
     if (domain->dimension == 3) {
-      if (narg != 9) {
+      if (((narg-10)%3)!=0 {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
@@ -152,7 +154,27 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     add_basis(0.25,0.75,0.75);
     add_basis(0.75,0.75,0.75);
   }
-  //if (style == BRAVAIS)
+  if (style == BRAVAIS) {
+    add_basis(0.0,0.0,0.0);
+    if (domain->dimension == 1) {
+      int i_basis = (narg-1);
+      for (int i = 0; i < i_basis; i++) {
+        add_basis(atof(arg[(1+i)]),0.0,0.0);
+      }
+    }
+    if (domain->dimension == 2) {
+      int i_basis = ((narg-5)/2);
+      for (int i = 0; i < i_basis; i++) {
+        add_basis(atof(arg[5+(i*2)]),atof(arg[6+(i*2)]),0.0);
+      }
+    }
+    if (domain->dimension == 3) {
+      int i_basis = ((narg-10)/3);
+      for (int i = 0; i < i_basis; i++) {
+        add_basis(atof(arg[10+(i*3)]),atof(arg[11+(i*3)]),atof(arg[12+(i*3)]));
+      }
+    }
+  }
 
 
   // set defaults for optional args
