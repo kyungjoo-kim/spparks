@@ -88,8 +88,9 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
       }
     }
     if (domain->dimension == 3) {
-      if (((narg-10)%3)!=0 {
-        error->all(FLERR, "Lattice arguments incommensurate with dimension");
+      if (((narg-10)%3)!=0) {
+   
+        error->all(FLERR, "herpLattice arguments incommensurate with dimension");
       }
     }
   }
