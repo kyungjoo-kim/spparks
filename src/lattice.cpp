@@ -78,19 +78,19 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
   if (style == BRAVAIS) {
     latconst = atof(arg[1]);
     if (domain->dimension == 1) {
-      if (narg == 0) {
+      if (narg == 1) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
     if (domain->dimension == 2) {
-      if (((narg-5)%2)!=0) {
+      if (((narg-6)%2)!=0) {
         error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
     if (domain->dimension == 3) {
-      if (((narg-10)%3)!=0) {
+      if (((narg-11)%3)!=0) {
    
-        error->all(FLERR, "herpLattice arguments incommensurate with dimension");
+        error->all(FLERR, "Lattice arguments incommensurate with dimension");
       }
     }
   }
@@ -158,21 +158,21 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
   if (style == BRAVAIS) {
     add_basis(0.0,0.0,0.0);
     if (domain->dimension == 1) {
-      int i_basis = (narg-1);
+      int i_basis = (narg-2);
       for (int i = 0; i < i_basis; i++) {
         add_basis(atof(arg[(1+i)]),0.0,0.0);
       }
     }
     if (domain->dimension == 2) {
-      int i_basis = ((narg-5)/2);
+      int i_basis = ((narg-6)/2);
       for (int i = 0; i < i_basis; i++) {
-        add_basis(atof(arg[5+(i*2)]),atof(arg[6+(i*2)]),0.0);
+        add_basis(atof(arg[6+(i*2)]),atof(arg[7+(i*2)]),0.0);
       }
     }
     if (domain->dimension == 3) {
-      int i_basis = ((narg-10)/3);
+      int i_basis = ((narg-11)/3);
       for (int i = 0; i < i_basis; i++) {
-        add_basis(atof(arg[10+(i*3)]),atof(arg[11+(i*3)]),atof(arg[12+(i*3)]));
+        add_basis(atof(arg[11+(i*3)]),atof(arg[12+(i*3)]),atof(arg[13+(i*3)]));
       }
     }
   }
