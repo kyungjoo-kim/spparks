@@ -3,7 +3,8 @@ echo both
 seed 98756
 app_style diffusion linear hop
 dimension 3
-lattice bravais 3.615 0.5 0.5 0.0 0.5 0.0 0.5 0.0 0.5 0.5 
+#lattice bravais 3.615 0.5 0.5 0.0 0.5 0.0 0.5 0.0 0.5 0.5 
+lattice fcc 3.615
 #variable n_rep equal 3
 #region myregion block 0 n_rep 0 n_rep 0 n_rep
 
