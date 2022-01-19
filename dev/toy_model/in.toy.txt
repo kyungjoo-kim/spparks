@@ -3,8 +3,8 @@ echo both
 seed 98756
 app_style diffusion linear hop
 dimension 3
-lattice custom 3.615 a1 0.5 0.5 0.0 a2 0.5 0.0 0.5 a3 0.0 0.5 0.5 basis 0.0 0.0 0.0 
-#lattice fcc 3.615
+#lattice custom 3.615 a1 0.5 0.5 0.0 a2 0.5 0.0 0.5 a3 0.0 0.5 0.5 basis 0.0 0.0 0.0 
+lattice fcc 3.615
 #variable n_rep equal 3
 #region myregion block 0 n_rep 0 n_rep 0 n_rep
 
