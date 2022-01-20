@@ -2,7 +2,6 @@
    SPPARKS - Stochastic Parallel PARticle Kinetic Simulator
    http://www.cs.sandia.gov/~sjplimp/spparks.html
    Steve Plimpton, sjplimp@sandia.gov, Sandia National Laboratories
-   Craig Daniels, cjdanie@sandia.gov, Sandia National Laboratories
 
    Copyright (2008) Sandia Corporation.  Under the terms of Contract
    DE-AC04-94AL85000 with Sandia Corporation, the U.S. Government retains
@@ -27,7 +26,7 @@ using namespace SPPARKS_NS;
 // same as in other files
 
 enum{NONE,LINE_2N,SQ_4N,SQ_8N,TRI,SC_6N,SC_26N,FCC,BCC,DIAMOND,
-       FCC_OCTA_TETRA,RANDOM_1D,RANDOM_2D,RANDOM_3D,BRAVAIS};
+       FCC_OCTA_TETRA,RANDOM_1D,RANDOM_2D,RANDOM_3D};
 
 /* ---------------------------------------------------------------------- */
 
@@ -51,7 +50,6 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
   else if (strcmp(arg[0],"random/1d") == 0) style = RANDOM_1D;
   else if (strcmp(arg[0],"random/2d") == 0) style = RANDOM_2D;
   else if (strcmp(arg[0],"random/3d") == 0) style = RANDOM_3D;
-  else if (strcmp(arg[0],"bravais") == 0) style = BRAVAIS;
   else error->all(FLERR,"Illegal lattice command");
 
   if (style == NONE) {
@@ -73,27 +71,7 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     nrandom = ATOTAGINT(arg[1]);
     cutoff = atof(arg[2]);
   }
-  // need to decide how many arguments bravais command needs for 2-D vs 3-D lattices, now assuming 4 and 9 respectively, plus a lattice constant, plus any additional basis atoms...
-  // 1-D lattice can still have multiple basis atoms...
-  if (style == BRAVAIS) {
-    latconst = atof(arg[1]);
-    if (domain->dimension == 1) {
-      if (narg == 1) {
-        error->all(FLERR, "Lattice arguments incommensurate with dimension");
-      }
-    }
-    if (domain->dimension == 2) {
-      if (((narg-6)%2)!=0) {
-        error->all(FLERR, "Lattice arguments incommensurate with dimension");
-      }
-    }
-    if (domain->dimension == 3) {
-      if (((narg-11)%3)!=0) {
-   
-        error->all(FLERR, "Lattice arguments incommensurate with dimension");
-      }
-    }
-  }
+
   // check dimensionality
 
   if ((style == LINE_2N || style == RANDOM_1D) && 
@@ -155,28 +133,6 @@ Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
     add_basis(0.25,0.75,0.75);
     add_basis(0.75,0.75,0.75);
   }
-  if (style == BRAVAIS) {
-    add_basis(0.0,0.0,0.0);
-    if (domain->dimension == 1) {
-      int i_basis = (narg-2);
-      for (int i = 0; i < i_basis; i++) {
-        add_basis(atof(arg[(1+i)]),0.0,0.0);
-      }
-    }
-    if (domain->dimension == 2) {
-      int i_basis = ((narg-6)/2);
-      for (int i = 0; i < i_basis; i++) {
-        add_basis(atof(arg[6+(i*2)]),atof(arg[7+(i*2)]),0.0);
-      }
-    }
-    if (domain->dimension == 3) {
-      int i_basis = ((narg-11)/3);
-      for (int i = 0; i < i_basis; i++) {
-        add_basis(atof(arg[11+(i*3)]),atof(arg[12+(i*3)]),atof(arg[13+(i*3)]));
-      }
-    }
-  }
-
 
   // set defaults for optional args
 

@@ -1,3 +1,0 @@
-rm dump.out
-rm log.spparks
-mpirun -np 1 /ascldap/users/cjdanie/GitSPPARKS/main/src/spk_blake -in in.Cu.txt
