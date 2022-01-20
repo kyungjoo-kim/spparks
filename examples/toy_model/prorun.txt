@@ -1,0 +1,4 @@
+
+rm dump.out
+rm log.spparks
+../../src/spk_butter -in in.toy.txt
