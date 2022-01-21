@@ -1,0 +1,34 @@
+#Input File to simulate Cu Self-diffusion
+echo both
+seed 98756
+app_style diffusion linear hop
+dimension 3
+#lattice custom 3.615 a1 0.5 0.5 0.0 a2 0.5 0.0 0.5 a3 0.0 0.5 0.5 basis 0.0 0.0 0.0 
+lattice fcc 3.615
+#variable n_rep equal 3
+#region myregion block 0 n_rep 0 n_rep 0 n_rep
+
+region myregion block 0 3 0 3 0 3
+create_box myregion
+create_sites box
+set site value 2
+#variable V_num equal 1
+#variable V_frac equal (V_num/((3**2)*4.0))
+
+set site value 1 fraction 0.01
+#set site value 1 fraction $V_frac 
+#set site value 1 fraction (1/((n_rep**2)*4)) 
+
+barrier hop 1 0.69
+
+temperature 0.04
+solve_style linear
+
+dump dump1 text 0.25 dump.out
+stats 0.1
+
+variable i loop 10
+label loop
+ run 10
+next i 
+
