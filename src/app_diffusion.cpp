@@ -25,7 +25,7 @@ using namespace SPPARKS_NS;
 
 enum{ZERO,VACANT,OCCUPIED,TOP};
 enum{NO_ENERGY,LINEAR,NONLINEAR};
-enum{DEPOSITION,NNHOP,SCHWOEBEL};
+enum{DEPOSITION,NNHOP,SCHWOEBEL,DESORB};
 enum{NOSWEEP,RANDOM,RASTER,COLOR,COLOR_STRICT};  // from app_lattice.cpp
 
 #define DELTAEVENT 100000
@@ -93,6 +93,7 @@ AppDiffusion::AppDiffusion(SPPARKS *spk, int narg, char **arg) :
 
   depflag = 0;
   barrierflag = 0;
+  desflag = 0;
 
   // statistics
 
@@ -177,6 +178,12 @@ void AppDiffusion::input_app(char *command, int narg, char **arg)
     dir[0] /= len;
     dir[1] /= len;
     dir[2] /= len;
+
+  } else if (strcmp(command,"desorb")==0) {
+    if (narg != 1) error->all(FLERR,"Illegal desorb command");
+    desflag = 1;
+    desrate = atof(arg[0]);
+    if (desrate <0.0) error-> all(FLERR, "Illegal desorb command");
 
   } else if (strcmp(command,"barrier") == 0) {
     if (narg < 1) error->all(FLERR,"Illegal barrier command");
@@ -479,6 +486,14 @@ double AppDiffusion::site_propensity_linear(int i)
     } else return 0.0;
   }
 
+  //Adatom pair desorbtion
+  if (lattice[i] == OCCUPIED) {
+    if (desflag) {
+      int partner=desorb_event(i);
+      if (partner>0) add_event(i,partner,desrate,DESORB);
+    }
+  }
+
   // nhop1 = 1st neigh hops, nhop2 = 2nd neigh hops
   // hopsite = all possible hop sites
 
@@ -533,6 +548,7 @@ double AppDiffusion::site_propensity_linear(int i)
   }
 
   // add in single deposition event, stored by site 0
+  //Is this used? Same condition earlier has return statement. Should it also have proball+= deprate?
 
   if (depflag && i == 0) {
     add_event(i,-1,deprate,DEPOSITION);
@@ -722,6 +738,11 @@ void AppDiffusion::site_event_linear(int i, class RandomPark *random)
     if (m < 0) return;
     lattice[m] = OCCUPIED;
     i = j = m;
+  } else if (events[ievent].style == DESORB) {
+    j = events[ievent].destination;
+    std::cout('desorb \n')
+    lattice[i] = VACANT;
+    lattice[j] = VACANT;
   } else {
     j = events[ievent].destination;
     if (events[ievent].style == NNHOP) nfirst++;
@@ -1157,6 +1178,34 @@ int AppDiffusion::find_deposition_site(RandomPark *random)
 
   return closesite;
 }
+
+/* ----------------------------------------------------------------------
+  Toy event: two atoms desorb with some probability when become 1st NN.
+  Intended to work with deposition command and simulate 2 adatoms reacting
+  and desorbing on a catalytic surface. Return -1 if no desorbing sites found. 
+------------------------------------------------------------------------- */
+int AppDiffusion::desorb_event(int temp) {
+  int twosite = -1;
+  int i, ncount;
+  //Search simulation for neighboring adatoms
+  for (i = 0; i<nlocal; i++) {
+    if (lattice[i] != OCCUPIED) continue;
+    ncount = 0;
+    for (int j = 0; j< numneigh[i]; j++) {
+      if (lattice[neighbor[i][j]] == OCCUPIED) ncount++;
+      if (ncount !=1) continue; //Desorb if and only if 2 neighboring adatoms.
+      else {
+        ndesorb++;
+        twosite = i;
+        break;
+      }
+    } 
+  }
+  return twosite;
+}
+
+
+
 
 /* ----------------------------------------------------------------------
    test if site M is within normal distance d0 from incident line

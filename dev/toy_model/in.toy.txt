@@ -1,4 +1,4 @@
-#Input File for a simple diffusion model
+#Input File for a simple catalyst model
 echo both
 seed 9875
 app_style diffusion linear hop

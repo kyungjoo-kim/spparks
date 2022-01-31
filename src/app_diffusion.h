@@ -62,8 +62,8 @@ class AppDiffusion : public AppLattice {
   int *firstevent;         // index of 1st event for each owned site
   int freeevent;           // index of 1st unused event in list
 
-  int depflag;             // deposition on or off
-  double deprate,thetalo,thetahi;
+  int depflag,desflag;             // deposition on or off
+  double deprate,thetalo,thetahi,desrate;
   double d0;
   int coordlo,coordhi;
   double dir[3];
@@ -77,7 +77,7 @@ class AppDiffusion : public AppLattice {
   int *mark;                // flagged sites
   int *marklist;            // list of flagged sites
 
-  int ndeposit,ndeposit_failed;  // stats
+  int ndeposit,ndeposit_failed,ndesorb;  // stats
   int nfirst,nsecond;
 
   double site_propensity_no_energy(int);
@@ -97,6 +97,7 @@ class AppDiffusion : public AppLattice {
 
   int schwoebel_enumerate(int, int *);
   int find_deposition_site(class RandomPark *);
+  int desorb_event(int);
   int exceed_limit(int, double *, double &);
   double distsq_to_line(int, double *, int, int, double &);
   void allocate_data();
