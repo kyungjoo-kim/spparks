@@ -1,27 +1,29 @@
 #Input File for a simple catalyst model
 echo both
-seed 9875
+seed 98750
 app_style diffusion linear hop
 dimension 2
 lattice sq/8n 1.0
-variable n_rep equal 100
+variable n_rep equal 4
 region myregion block 0 ${n_rep} 0 ${n_rep} 0 1
 create_box myregion
 create_sites box
 set site value 1
+set site value 2 fraction 0.1
 
-barrier hop 1 0.69
-deposition 1.0 0 -1 0 1.0 0 6 
-desorb 1.0
 
-temperature 0.04
+barrier hop 1 0.1
+#deposition 1.0 0 -1 0 1.0 0 6 
+desorb 1
+
+temperature 0.9
 solve_style linear
 
 dump dump1 text 0.25 dump.out
-stats 0.1
+stats 100
 
 variable i loop 10
 label loop
-run 100ß
+run 1000
 next i 
 

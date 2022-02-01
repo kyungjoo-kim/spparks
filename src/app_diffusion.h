@@ -62,7 +62,7 @@ class AppDiffusion : public AppLattice {
   int *firstevent;         // index of 1st event for each owned site
   int freeevent;           // index of 1st unused event in list
 
-  int depflag,desflag;             // deposition on or off
+  int depflag,desflag;             // deposition on or off, desorbtion on or off
   double deprate,thetalo,thetahi,desrate;
   double d0;
   int coordlo,coordhi;
