@@ -184,7 +184,6 @@ void AppDiffusion::input_app(char *command, int narg, char **arg)
     if (narg != 1) error->all(FLERR,"Illegal desorb command");
     desflag = 1;
     desrate = atof(arg[0]);
-    printf("desrate = %f",desrate);
     if (desrate <0.0) error-> all(FLERR, "Illegal desorb command");
 
   } else if (strcmp(command,"barrier") == 0) {
@@ -488,14 +487,6 @@ double AppDiffusion::site_propensity_linear(int i)
     } else return 0.0;
   }
 
-  //Adatom pair desorbtion
-  if (lattice[i] == OCCUPIED) {
-    if (desflag) {
-      int partner=desorb_event(i);
-      if (partner>=0) add_event(i,partner,desrate,DESORB);
-    }
-  }
-
   // nhop1 = 1st neigh hops, nhop2 = 2nd neigh hops
   // hopsite = all possible hop sites
 
@@ -555,6 +546,17 @@ double AppDiffusion::site_propensity_linear(int i)
   if (depflag && i == 0) {
     add_event(i,-1,deprate,DEPOSITION);
     proball += deprate;
+  }
+
+    //Adatom pair desorbtion
+  if (lattice[i] == OCCUPIED) {
+    if (desflag) {
+      int partner=desorb_event(i);
+      if (partner>=0) {
+        add_event(i,partner,desrate,DESORB);
+        proball += desrate;
+      }
+    }
   }
 
   return proball;
@@ -734,16 +736,13 @@ void AppDiffusion::site_event_linear(int i, class RandomPark *random)
   // for deposition event, find site to deposit on
   // after deposition, reset i and j to that site
   // so propensity around it is updated correctly
-  //std::cout<<"Event= "<<events[ievent].style<<" Propensity= "<<events[ievent].propensity<<std::endl;
   if (events[ievent].style == DEPOSITION) {
     m = find_deposition_site(random);
     if (m < 0) return;
     lattice[m] = OCCUPIED;
     i = j = m;
-    printf("Deposition \n");
   } else if (events[ievent].style == DESORB) {
     j = events[ievent].destination;
-    printf("desorb linear \n");
     lattice[i] = VACANT;
     lattice[j] = VACANT;
   } else {
@@ -752,7 +751,6 @@ void AppDiffusion::site_event_linear(int i, class RandomPark *random)
     else nsecond++;
     lattice[i] = VACANT;
     lattice[j] = OCCUPIED;
-    //printf("NNHOP \n");
   }
 
   // compute propensity changes for self and swap site and their neighs
@@ -828,7 +826,6 @@ void AppDiffusion::site_event_nonlinear(int i, class RandomPark *random)
   // for deposition event, find site to deposit on
   // after deposition, reset i and j to that site
   // so propensity around it is updated correctly
-  printf("herp");
 
   if (events[ievent].style == DEPOSITION) {
     m = find_deposition_site(random);
@@ -837,7 +834,6 @@ void AppDiffusion::site_event_nonlinear(int i, class RandomPark *random)
     i = j = m;
   } else if (events[ievent].style == DESORB) {
     j = events[ievent].destination;
-    printf("desorb \n");
     lattice[i] = VACANT;
     lattice[j] = VACANT;
   } else {
@@ -1056,7 +1052,6 @@ void AppDiffusion::add_event(int i, int destination,
 			      double propensity, int eventflag)
 {
   // grow event list and setup free list
-
   if (nevents == maxevent) {
     maxevent += DELTAEVENT;
     events = 
@@ -1072,7 +1067,6 @@ void AppDiffusion::add_event(int i, int destination,
   firstevent[i] = freeevent;
   freeevent = next;
   nevents++;
-  //if (eventflag==DESORB) std::cout<<"Desorb Propensity= "<<propensity<<std::endl;
 }
 
 /* ----------------------------------------------------------------------

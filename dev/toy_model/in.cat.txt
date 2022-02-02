@@ -9,11 +9,11 @@ region myregion block 0 ${n_rep} 0 ${n_rep} 0 1
 create_box myregion
 create_sites box
 set site value 1
-set site value 2 fraction 0.1
+#set site value 2 fraction 0.1
 
 
 barrier hop 1 0.1
-#deposition 1.0 0 -1 0 1.0 0 6 
+deposition 1.0 0 -1 0 1.0 0 6 
 desorb 1
 
 temperature 0.9
@@ -24,6 +24,6 @@ stats 100
 
 variable i loop 10
 label loop
-run 1000
+run 5
 next i 
 
