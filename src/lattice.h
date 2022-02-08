@@ -14,6 +14,11 @@
 #ifndef SPK_LATTICE_H
 #define SPK_LATTICE_H
 
+/// Craig, this is just for exmaple
+#if defined(SPPARKS_EIGEN3)
+#include "Eigen/Dense"
+#endif
+
 #include "pointers.h"
 
 namespace SPPARKS_NS {

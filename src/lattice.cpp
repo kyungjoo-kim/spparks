@@ -21,6 +21,8 @@
 #include "memory.h"
 #include "error.h"
 
+#include "iostream"
+
 using namespace SPPARKS_NS;
 
 // same as in other files
@@ -32,6 +34,18 @@ enum{NONE,LINE_2N,SQ_4N,SQ_8N,TRI,SC_6N,SC_26N,FCC,BCC,DIAMOND,
 
 Lattice::Lattice(SPPARKS *spk, int narg, char **arg) : Pointers(spk)
 {
+  /// Craig example running eigen
+#if defined(SPPARKS_EIGEN3)
+  {
+    using matrix_type = Eigen::MatrixXd;
+    matrix_type A(3,3);
+    A(0,0) = 1;
+    A(1,1) = 2;
+    A(2,2) = 3;
+    std::cout << "Eigen test" << std::endl;
+    std::cout << A << std::endl;    
+  }
+#endif
   // parse style arg
 
   if (narg < 1) error->all(FLERR,"Illegal lattice command");
